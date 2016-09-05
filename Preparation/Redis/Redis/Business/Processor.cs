@@ -12,7 +12,18 @@ namespace Redis.Business
     {
         public ParticipantAnnualReportKeyDataPoints[] RunBusinessFlow()
         {
-            throw new NotImplementedException();
+            ParticipantAnnualReportKeyDataPoints[] participantArray = new ParticipantAnnualReportKeyDataPoints[100000];
+
+            for (int i = 0; i < 100000; i++)
+            {
+                participantArray[i] = new ParticipantAnnualReportKeyDataPoints();
+                participantArray[i].IsDeceased = i % 100 == 0 ? true : false;
+                participantArray[i].IsExpat = i % 40 == 0 ? true : false;
+                participantArray[i].IsTerminated = i % 15 == 0 ? true : false;
+                participantArray[i].IsWait = i % 20 == 0 ? true : false;
+                participantArray[i].PersonID = i + 1;
+            }
+            return participantArray;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Redis.Business;
 using Redis.DataAccess;
+using Redis.Common;
 
 namespace Redis
 {
@@ -13,9 +14,12 @@ namespace Redis
     {
         static void Main(string[] args)
         {
-           
+            Processor p = new Processor();
+            ParticipantAnnualReportKeyDataPoints[] participantArray = p.RunBusinessFlow();
             DataProcessor processor = new DataProcessor();
-            processor.TestRedisConnection();
+
+            //processor.TestRedisConnection();
+            processor.InsertAll(participantArray);
         }
     }
 }

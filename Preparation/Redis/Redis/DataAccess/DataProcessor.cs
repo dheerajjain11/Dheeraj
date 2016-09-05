@@ -15,11 +15,32 @@ namespace Redis.DataAccess
         static readonly string RedisConnectionString = ConfigurationManager.ConnectionStrings["Redis"].ToString();
         public void InsertAll(ParticipantAnnualReportKeyDataPoints[] dataArray)
         {
-            //using (ConnectionMultiplexer redisConnection = ConnectionMultiplexer.Connect(RedisConnectionString))
-            //{
-            //    IDatabase cache = redisConnection.GetDatabase();
-            //    cache.s
-            //}
+            using (ConnectionMultiplexer redisConnection = ConnectionMultiplexer.Connect(RedisConnectionString))
+            {
+                IDatabase cache = redisConnection.GetDatabase();
+
+                //insert in first million rows
+                for (int i = 0; i < dataArray.Length; i++)
+                {
+                    cache.StringSetBitAsync(dataArray[i].PersonID.ToString(), 0, dataArray[i].IsDeceased);
+                }
+                //insert in next million rows
+                for (int i = 0; i < dataArray.Length; i++)
+                {
+                    cache.StringSetBitAsync(dataArray[i].PersonID.ToString(), 1000000, dataArray[i].IsExpat);
+                }
+                //insert in next million rows
+                for (int i = 0; i < dataArray.Length; i++)
+                {
+                    cache.StringSetBitAsync(dataArray[i].PersonID.ToString(), 2000000, dataArray[i].IsTerminated);
+                }
+                //insert in next million rows
+                for (int i = 0; i < dataArray.Length; i++)
+                {
+                    cache.StringSetBitAsync(dataArray[i].PersonID.ToString(), 3000000, dataArray[i].IsWait);
+                }
+
+            }
         }
 
         public bool TestRedisConnection()
